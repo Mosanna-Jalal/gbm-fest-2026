@@ -72,7 +72,6 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-xs text-slate-500 mt-5">Default admins: admin1/admin2/admin3/admin4, password: theycallmemj</p>
       </div>
     </main>
   );
