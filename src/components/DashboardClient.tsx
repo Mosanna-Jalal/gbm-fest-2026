@@ -107,6 +107,12 @@ export default function DashboardClient({
 
   const [query, setQuery] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [isSavingBuyer, setIsSavingBuyer] = useState(false);
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  const [isRecordingMovement, setIsRecordingMovement] = useState(false);
+  const [isDownloadingText, setIsDownloadingText] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [lastEntries, setLastEntries] = useState<LastEntry[]>(initialLastEntries);
   const [message, setMessage] = useState("");
@@ -138,6 +144,7 @@ export default function DashboardClient({
       setStudents([]);
       return;
     }
+
     const params = new URLSearchParams();
     params.set("query", search.trim());
     params.set("festDay", selectedDay);
@@ -161,39 +168,48 @@ export default function DashboardClient({
 
   async function handleSearch(event: React.FormEvent) {
     event.preventDefault();
+    setIsSearching(true);
     setHasSearched(true);
-    await loadStudents();
+    try {
+      await loadStudents();
+    } finally {
+      setIsSearching(false);
+    }
   }
 
   async function handleSaveBuyer(event: React.FormEvent) {
     event.preventDefault();
     setMessage("");
+    setIsSavingBuyer(true);
+    try {
+      const method = form.id ? "PUT" : "POST";
+      const url = form.id ? `/api/students/${form.id}` : "/api/students";
 
-    const method = form.id ? "PUT" : "POST";
-    const url = form.id ? `/api/students/${form.id}` : "/api/students";
+      const response = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          serialNo: Number(form.serialNo),
+          name: form.name,
+          classRoll: form.classRoll,
+          passNumbers: form.passNumbers,
+          phoneNo: form.phoneNo,
+          notes: form.notes,
+        }),
+      });
 
-    const response = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        serialNo: Number(form.serialNo),
-        name: form.name,
-        classRoll: form.classRoll,
-        passNumbers: form.passNumbers,
-        phoneNo: form.phoneNo,
-        notes: form.notes,
-      }),
-    });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setMessage(data.error || "Failed to save pass details");
+        return;
+      }
 
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      setMessage(data.error || "Failed to save buyer");
-      return;
+      setMessage(form.id ? "Pass details updated successfully." : "Pass details added successfully.");
+      setForm({ id: "", serialNo: "", name: "", classRoll: "", passNumbers: "", phoneNo: "", notes: "" });
+      await loadStudents();
+    } finally {
+      setIsSavingBuyer(false);
     }
-
-    setMessage(form.id ? "Buyer updated successfully." : "Buyer added successfully.");
-    setForm({ id: "", serialNo: "", name: "", classRoll: "", passNumbers: "", phoneNo: "", notes: "" });
-    await loadStudents();
   }
 
   function startEdit(student: Student) {
@@ -211,56 +227,73 @@ export default function DashboardClient({
 
   async function handlePreview() {
     setMessage("");
-    const response = await fetch("/api/students/bulk-preview", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ passNos: bulkPassNos, festDay, action: bulkAction }),
-    });
+    setIsPreviewing(true);
+    try {
+      const response = await fetch("/api/students/bulk-preview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ passNos: bulkPassNos, festDay, action: bulkAction }),
+      });
 
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      setMessage(data.error || "Failed to preview.");
-      return;
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setMessage(data.error || "Failed to preview.");
+        return;
+      }
+
+      setPreviewRows(data.preview || []);
+    } finally {
+      setIsPreviewing(false);
     }
-
-    setPreviewRows(data.preview || []);
   }
 
   async function handleSubmitBulk() {
     setMessage("");
-    const response = await fetch("/api/entries/bulk", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ passNos: bulkPassNos, action: bulkAction, festDay }),
-    });
+    setIsRecordingMovement(true);
+    try {
+      const response = await fetch("/api/entries/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ passNos: bulkPassNos, action: bulkAction, festDay }),
+      });
 
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      setMessage(data.error || "Bulk submit failed");
-      return;
-    }
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setMessage(data.error || "Bulk submit failed");
+        return;
+      }
 
-    const missing = data.missingPassNos?.length ? ` Missing: ${data.missingPassNos.join(", ")}` : "";
-    const blocked = data.blockedPassNos?.length
-      ? ` Blocked (already entered): ${data.blockedPassNos.join(", ")}`
-      : "";
-    const blockedExit = data.blockedExitPassNos?.length
-      ? ` Blocked (cannot exit without active entry): ${data.blockedExitPassNos.join(", ")}`
-      : "";
-    const invalidHint = data.missingPassNos?.length
-      ? ` Invalid pass no. Add pass no.: ${data.missingPassNos.join(", ")}`
-      : "";
-    setMessage(`${data.createdCount} records submitted.${missing}${blocked}${blockedExit}${invalidHint}`);
-    setPreviewRows([]);
-    setBulkPassNos("");
-    if (Array.isArray(data.createdLogs) && data.createdLogs.length) {
-      setLastEntries(data.createdLogs);
-    } else {
-      await loadLastEntry();
+      const missing = data.missingPassNos?.length ? ` Missing: ${data.missingPassNos.join(", ")}` : "";
+      const blocked = data.blockedPassNos?.length
+        ? ` Blocked (already entered): ${data.blockedPassNos.join(", ")}`
+        : "";
+      const blockedExit = data.blockedExitPassNos?.length
+        ? ` Blocked (cannot exit without active entry): ${data.blockedExitPassNos.join(", ")}`
+        : "";
+      const invalidHint = data.missingPassNos?.length
+        ? ` Invalid pass no. Add pass no.: ${data.missingPassNos.join(", ")}`
+        : "";
+      setMessage(`${data.createdCount} records submitted.${missing}${blocked}${blockedExit}${invalidHint}`);
+      setPreviewRows([]);
+      setBulkPassNos("");
+      if (Array.isArray(data.createdLogs) && data.createdLogs.length) {
+        setLastEntries(data.createdLogs);
+      } else {
+        await loadLastEntry();
+      }
+    } finally {
+      setIsRecordingMovement(false);
     }
   }
 
+  async function handleDownloadText() {
+    setIsDownloadingText(true);
+    window.open("/api/students/export-text", "_blank");
+    setTimeout(() => setIsDownloadingText(false), 700);
+  }
+
   async function handleLogout() {
+    setIsLoggingOut(true);
     await fetch("/api/auth/logout", { method: "POST" });
     router.push("/login");
     router.refresh();
@@ -284,16 +317,18 @@ export default function DashboardClient({
             </Link>
             <button
               type="button"
-              onClick={() => window.open("/api/students/export-text", "_blank")}
-              className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50 w-full sm:w-auto"
+              onClick={handleDownloadText}
+              disabled={isDownloadingText}
+              className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50 w-full sm:w-auto disabled:opacity-60"
             >
-              Download Text File
+              {isDownloadingText ? "Opening..." : "Download Text File"}
             </button>
             <button
               onClick={handleLogout}
-              className="rounded-xl bg-slate-900 text-white px-3 py-2 text-sm font-semibold w-full sm:w-auto"
+              disabled={isLoggingOut}
+              className="rounded-xl bg-slate-900 text-white px-3 py-2 text-sm font-semibold w-full sm:w-auto disabled:opacity-60"
             >
-              Logout
+              {isLoggingOut ? "Logging out..." : "Logout"}
             </button>
           </div>
         </div>
@@ -343,8 +378,12 @@ export default function DashboardClient({
                   }
                 }}
               />
-              <button className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto" type="submit">
-                Search
+              <button
+                className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60"
+                type="submit"
+                disabled={isSearching}
+              >
+                {isSearching ? "Searching..." : "Search"}
               </button>
             </form>
 
@@ -397,10 +436,10 @@ export default function DashboardClient({
                   )}
                 </div>
               ))}
-              {!students.length && query.trim() && hasSearched ? (
+              {!students.length && query.trim() && hasSearched && !isSearching ? (
                 <div className="rounded-xl border border-red-200 bg-red-50 p-3">
                   <p className="text-sm font-semibold text-red-700">Invalid pass no. / phone no.</p>
-                  <p className="text-xs text-red-700 mt-1">Please add pass no. from the Add / Edit Buyer section.</p>
+                  <p className="text-xs text-red-700 mt-1">Please add pass no. from the Add / Edit Passes section.</p>
                 </div>
               ) : !query.trim() ? (
                 <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
@@ -413,7 +452,7 @@ export default function DashboardClient({
           </div>
 
           <div className="rounded-2xl border border-slate-200 p-4">
-            <h2 className="text-base font-bold">Add / Edit Buyer</h2>
+            <h2 className="text-base font-bold">Add / Edit Passes</h2>
             <form className="grid gap-2 mt-3" onSubmit={handleSaveBuyer}>
               <input
                 className="rounded-xl border border-slate-300 px-3 py-2"
@@ -459,8 +498,12 @@ export default function DashboardClient({
               />
 
               <div className="grid grid-cols-1 sm:flex gap-2">
-                <button className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto" type="submit">
-                  {form.id ? "Update Buyer" : "Add Buyer"}
+                <button
+                  className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60"
+                  type="submit"
+                  disabled={isSavingBuyer}
+                >
+                  {isSavingBuyer ? "Saving..." : form.id ? "Update Passes" : "Add Passes"}
                 </button>
                 {form.id ? (
                   <button
@@ -509,11 +552,21 @@ export default function DashboardClient({
                 <option value="EXIT">EXIT (out gate)</option>
               </select>
 
-              <button className="rounded-xl border border-slate-300 px-4 py-2 font-semibold w-full sm:w-auto" type="button" onClick={handlePreview}>
-                Preview Details
+              <button
+                className="rounded-xl border border-slate-300 px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60"
+                type="button"
+                onClick={handlePreview}
+                disabled={isPreviewing}
+              >
+                {isPreviewing ? "Previewing..." : "Preview Details"}
               </button>
-              <button className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto" type="button" onClick={handleSubmitBulk}>
-                Submit Bulk
+              <button
+                className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60"
+                type="button"
+                onClick={handleSubmitBulk}
+                disabled={isRecordingMovement}
+              >
+                {isRecordingMovement ? "Recording..." : "Record Movement"}
               </button>
             </div>
 
@@ -542,7 +595,7 @@ export default function DashboardClient({
                       ) : null}
                     </div>
                   ) : (
-                    <p className="text-sm text-[var(--danger)]">Invalid pass no. Add pass no. in Add / Edit Buyer.</p>
+                    <p className="text-sm text-[var(--danger)]">Invalid pass no. Add pass no. in Add / Edit Passes.</p>
                   )}
                 </div>
               ))}
