@@ -133,30 +133,14 @@ export default function DashboardClient({
   const [bulkAction, setBulkAction] = useState<"ENTRY" | "EXIT">("ENTRY");
   const [festDay, setFestDay] = useState<"2026-04-06" | "2026-04-07">(initialFestDay);
   const [previewRows, setPreviewRows] = useState<PreviewRow[]>([]);
+  const [blockedAlert, setBlockedAlert] = useState("");
 
   const previewStats = useMemo(() => {
     const found = previewRows.filter((row) => row.status === "FOUND").length;
     return { found, notFound: previewRows.length - found };
   }, [previewRows]);
 
-  const previewBlockedMessage = useMemo(() => {
-    const blockedEntryPasses = previewRows
-      .filter((row) => row.blockedForEntry)
-      .map((row) => row.passNo);
-    const blockedExitPasses = previewRows
-      .filter((row) => row.blockedForExit)
-      .map((row) => row.passNo);
-
-    const parts: string[] = [];
-    if (blockedEntryPasses.length) {
-      parts.push(`Continuous ENTRY blocked: ${blockedEntryPasses.join(", ")}`);
-    }
-    if (blockedExitPasses.length) {
-      parts.push(`Continuous/invalid EXIT blocked: ${blockedExitPasses.join(", ")}`);
-    }
-
-    return parts.join(" | ");
-  }, [previewRows]);
+  const previewBlockedMessage = useMemo(() => getBlockedMessage(previewRows), [previewRows]);
 
   async function loadStudents(searchQuery?: string, day?: "2026-04-06" | "2026-04-07") {
     const search = searchQuery ?? query;
@@ -248,6 +232,7 @@ export default function DashboardClient({
 
   async function handlePreview() {
     setMessage("");
+    setBlockedAlert("");
     setIsPreviewing(true);
     try {
       const response = await fetch("/api/students/bulk-preview", {
@@ -262,7 +247,9 @@ export default function DashboardClient({
         return;
       }
 
-      setPreviewRows(data.preview || []);
+      const preview = data.preview || [];
+      setPreviewRows(preview);
+      setBlockedAlert(getBlockedMessage(preview));
     } finally {
       setIsPreviewing(false);
     }
@@ -270,6 +257,7 @@ export default function DashboardClient({
 
   async function handleSubmitBulk() {
     setMessage("");
+    setBlockedAlert("");
     setIsRecordingMovement(true);
     try {
       const response = await fetch("/api/entries/bulk", {
@@ -285,16 +273,20 @@ export default function DashboardClient({
       }
 
       const missing = data.missingPassNos?.length ? ` Missing: ${data.missingPassNos.join(", ")}` : "";
-    const blocked = data.blockedPassNos?.length
-      ? ` Blocked (continuous ENTRY): ${data.blockedPassNos.join(", ")}`
-      : "";
-    const blockedExit = data.blockedExitPassNos?.length
-      ? ` Blocked (continuous/invalid EXIT): ${data.blockedExitPassNos.join(", ")}`
-      : "";
+      const blocked = data.blockedPassNos?.length
+        ? ` Blocked (continuous ENTRY): ${data.blockedPassNos.join(", ")}`
+        : "";
+      const blockedExit = data.blockedExitPassNos?.length
+        ? ` Blocked (continuous/invalid EXIT): ${data.blockedExitPassNos.join(", ")}`
+        : "";
       const invalidHint = data.missingPassNos?.length
         ? ` Invalid pass no. Add pass no.: ${data.missingPassNos.join(", ")}`
         : "";
-      setMessage(`${data.createdCount} records submitted.${missing}${blocked}${blockedExit}${invalidHint}`);
+      setMessage(`${data.createdCount} records submitted.${missing}${invalidHint}`);
+      const blockedMessage = `${blocked}${blockedExit}`.trim();
+      if (blockedMessage) {
+        setBlockedAlert(blockedMessage);
+      }
       setPreviewRows([]);
       setBulkPassNos("");
       if (Array.isArray(data.createdLogs) && data.createdLogs.length) {
@@ -568,8 +560,10 @@ export default function DashboardClient({
               onChange={(event) => setBulkPassNos(event.target.value)}
             />
 
-            {previewBlockedMessage ? (
-              <p className="mt-3 text-xs font-semibold text-red-700">{previewBlockedMessage}</p>
+            {(blockedAlert || previewBlockedMessage) ? (
+              <p className="mt-3 text-xs font-semibold text-red-700">
+                {blockedAlert || previewBlockedMessage}
+              </p>
             ) : null}
 
             <div className="mt-3 grid grid-cols-1 sm:flex sm:flex-wrap gap-2">
@@ -662,3 +656,16 @@ export default function DashboardClient({
     </main>
   );
 }
+  function getBlockedMessage(rows: PreviewRow[]) {
+    const blockedEntryPasses = rows.filter((row) => row.blockedForEntry).map((row) => row.passNo);
+    const blockedExitPasses = rows.filter((row) => row.blockedForExit).map((row) => row.passNo);
+
+    const parts: string[] = [];
+    if (blockedEntryPasses.length) {
+      parts.push(`Continuous ENTRY blocked: ${blockedEntryPasses.join(", ")}`);
+    }
+    if (blockedExitPasses.length) {
+      parts.push(`Continuous/invalid EXIT blocked: ${blockedExitPasses.join(", ")}`);
+    }
+    return parts.join(" | ");
+  }
