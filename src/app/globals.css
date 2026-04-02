@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --paper: #fbf8f2;
-  --ink: #1c2a39;
-  --accent: #0f7a6b;
-  --accent-soft: #daf2ed;
+  --paper: #f5fbff;
+  --ink: #12263a;
+  --accent: #0d9488;
+  --accent-soft: #d6f5f2;
+  --accent-deep: #0f3d56;
   --card: #ffffff;
   --danger: #b8342e;
 }
@@ -40,6 +41,34 @@ button {
   pointer-events: none;
   overflow: hidden;
   z-index: 0;
+}
+
+.glass-card {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(242, 252, 255, 0.86));
+  border: 1px solid rgba(180, 215, 235, 0.55);
+  box-shadow: 0 10px 30px rgba(19, 82, 122, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.panel-card {
+  border: 1px solid rgba(189, 214, 232, 0.75);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 14px rgba(23, 72, 107, 0.05);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.panel-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(23, 72, 107, 0.09);
+}
+
+.action-btn {
+  transition: transform 140ms ease, filter 140ms ease, box-shadow 140ms ease;
+}
+
+.action-btn:hover {
+  filter: brightness(1.02);
+  transform: translateY(-1px);
 }
 
 .wave-orb {

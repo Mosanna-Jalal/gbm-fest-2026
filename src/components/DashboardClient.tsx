@@ -301,7 +301,7 @@ export default function DashboardClient({
 
   return (
     <main className="min-h-screen p-2 sm:p-6">
-      <section className="max-w-6xl mx-auto rounded-2xl sm:rounded-3xl bg-[var(--card)]/95 backdrop-blur border border-white shadow-xl p-3 sm:p-6 space-y-5 sm:space-y-6">
+      <section className="max-w-6xl mx-auto rounded-2xl sm:rounded-3xl glass-card p-3 sm:p-6 space-y-5 sm:space-y-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--accent)]">Centralized Gate Control</p>
@@ -311,7 +311,7 @@ export default function DashboardClient({
           <div className="grid grid-cols-1 sm:flex gap-2 w-full sm:w-auto">
             <Link
               href="/students"
-              className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50 text-center w-full sm:w-auto"
+              className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50 text-center w-full sm:w-auto action-btn"
             >
               Full List
             </Link>
@@ -319,21 +319,21 @@ export default function DashboardClient({
               type="button"
               onClick={handleDownloadText}
               disabled={isDownloadingText}
-              className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50 w-full sm:w-auto disabled:opacity-60"
+              className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50 w-full sm:w-auto disabled:opacity-60 action-btn"
             >
               {isDownloadingText ? "Opening..." : "Download Text File"}
             </button>
             <button
               onClick={handleLogout}
               disabled={isLoggingOut}
-              className="rounded-xl bg-slate-900 text-white px-3 py-2 text-sm font-semibold w-full sm:w-auto disabled:opacity-60"
+              className="rounded-xl bg-[var(--accent-deep)] text-white px-3 py-2 text-sm font-semibold w-full sm:w-auto disabled:opacity-60 action-btn"
             >
               {isLoggingOut ? "Logging out..." : "Logout"}
             </button>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 p-4 bg-slate-50">
+        <div className="rounded-2xl panel-card p-4 bg-slate-50/80">
           <p className="text-xs font-semibold">Active Fest Day</p>
           <div className="grid grid-cols-1 sm:flex gap-2 mt-2">
             {(Object.keys(dayLabels) as Array<"2026-04-06" | "2026-04-07">).map((day) => (
@@ -363,7 +363,7 @@ export default function DashboardClient({
         </div>
 
         <div className="grid gap-4 lg:grid-cols-2">
-          <div className="rounded-2xl border border-slate-200 p-4">
+          <div className="rounded-2xl panel-card p-4">
             <h2 className="text-base font-bold">Search by Pass No. / Phone</h2>
             <form className="mt-3 flex flex-col sm:flex-row gap-2" onSubmit={handleSearch}>
               <input
@@ -379,7 +379,7 @@ export default function DashboardClient({
                 }}
               />
               <button
-                className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60"
+                className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60 action-btn"
                 type="submit"
                 disabled={isSearching}
               >
@@ -389,7 +389,7 @@ export default function DashboardClient({
 
             <div className="mt-3 max-h-80 overflow-auto space-y-2">
               {students.map((student) => (
-                <div key={student._id} className="rounded-xl border border-slate-200 p-3 bg-white">
+                <div key={student._id} className="rounded-xl border border-slate-200 p-3 bg-white/95">
                   <p className="font-semibold">{student.name}</p>
                   <p className="text-xs text-slate-600">Pass: {student.passNumbers.join("/")} | Phone: {student.phoneNo}</p>
                   <p className="text-xs text-slate-600">Class/Roll: {student.classRoll}</p>
@@ -451,7 +451,7 @@ export default function DashboardClient({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 p-4">
+          <div className="rounded-2xl panel-card p-4">
             <h2 className="text-base font-bold">Add / Edit Passes</h2>
             <form className="grid gap-2 mt-3" onSubmit={handleSaveBuyer}>
               <input
@@ -499,7 +499,7 @@ export default function DashboardClient({
 
               <div className="grid grid-cols-1 sm:flex gap-2">
                 <button
-                  className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60"
+                  className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60 action-btn"
                   type="submit"
                   disabled={isSavingBuyer}
                 >
@@ -507,7 +507,7 @@ export default function DashboardClient({
                 </button>
                 {form.id ? (
                   <button
-                    className="rounded-xl border border-slate-300 px-4 py-2 font-semibold w-full sm:w-auto"
+                    className="rounded-xl border border-slate-300 px-4 py-2 font-semibold w-full sm:w-auto action-btn"
                     type="button"
                     onClick={() =>
                       setForm({
@@ -530,7 +530,7 @@ export default function DashboardClient({
         </div>
 
         <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
-          <div className="rounded-2xl border border-slate-200 p-4">
+          <div className="rounded-2xl panel-card p-4">
             <h2 className="text-base font-bold">Bulk Pass Submission</h2>
             <p className="text-xs text-slate-600 mt-1">Paste pass numbers separated by comma, slash, space, or new line.</p>
 
@@ -553,7 +553,7 @@ export default function DashboardClient({
               </select>
 
               <button
-                className="rounded-xl border border-slate-300 px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60"
+                className="rounded-xl border border-slate-300 px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60 action-btn"
                 type="button"
                 onClick={handlePreview}
                 disabled={isPreviewing}
@@ -561,7 +561,7 @@ export default function DashboardClient({
                 {isPreviewing ? "Previewing..." : "Preview Details"}
               </button>
               <button
-                className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60"
+                className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60 action-btn"
                 type="button"
                 onClick={handleSubmitBulk}
                 disabled={isRecordingMovement}
@@ -574,7 +574,7 @@ export default function DashboardClient({
 
             <div className="mt-2 max-h-72 overflow-auto space-y-2">
               {previewRows.map((row) => (
-                <div key={`${row.passNo}-${row.status}`} className="rounded-xl border border-slate-200 p-3 bg-white">
+                <div key={`${row.passNo}-${row.status}`} className="rounded-xl border border-slate-200 p-3 bg-white/95">
                   <p className="font-semibold">Pass {row.passNo}</p>
                   {row.status === "FOUND" && row.student ? (
                     <div className="text-xs text-slate-600 space-y-1">
@@ -602,7 +602,7 @@ export default function DashboardClient({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 p-4 bg-slate-50">
+          <div className="rounded-2xl panel-card p-4 bg-slate-50/80">
             <h2 className="text-base font-bold">Your Last Submission</h2>
             {lastEntries.length ? (
               <div className="mt-3 space-y-2 max-h-64 overflow-auto">

@@ -26,7 +26,7 @@ export default async function SelectDayPage() {
 
   return (
     <main className="min-h-screen p-4 sm:p-8 flex items-center justify-center">
-      <section className="w-full max-w-xl rounded-2xl bg-white border border-slate-200 shadow-lg p-6 sm:p-8 space-y-5">
+      <section className="w-full max-w-xl rounded-2xl glass-card p-6 sm:p-8 space-y-5">
         <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">GBM FEST 2026</p>
         <h1 className="text-2xl font-bold">Choose Fest Day</h1>
         <p className="text-sm text-slate-600">
@@ -49,7 +49,7 @@ export default async function SelectDayPage() {
               <Link
                 key={day}
                 href={`/dashboard?festDay=${day}`}
-                className="rounded-xl border border-[var(--accent)] bg-[var(--accent-soft)] px-4 py-3 text-left"
+                className="rounded-xl border border-[var(--accent)] bg-[var(--accent-soft)] px-4 py-3 text-left action-btn"
               >
                 <p className="font-semibold text-[var(--accent)]">{dayLabels[day]}</p>
                 <p className="text-xs mt-1 text-slate-600">
