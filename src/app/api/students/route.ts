@@ -77,6 +77,13 @@ export async function GET(request: NextRequest) {
     const history = student.passNumbers
       .flatMap((passNo) => timelineByPass.get(passNo) || [])
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    const hasConsecutiveSameAction = history.some((entry, index, arr) => {
+      if (index === 0) return false;
+      const prev = arr[index - 1];
+      return prev.passNo === entry.passNo && prev.festDay === entry.festDay && prev.action === entry.action;
+    });
+
+    const cleanedHistory = history
       .filter((entry, index, arr) => {
         if (index === 0) return true;
         const prev = arr[index - 1];
@@ -96,7 +103,8 @@ export async function GET(request: NextRequest) {
       gateStatus,
       lastGateAction: latestForStudent?.action || null,
       lastGateTime: latestForStudent?.createdAt || null,
-      timeline: history,
+      timeline: cleanedHistory,
+      hasConsecutiveSameAction,
     };
   });
 

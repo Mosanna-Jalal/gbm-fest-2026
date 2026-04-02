@@ -49,7 +49,7 @@ export default function RootLayout({
           <div className="mx-auto max-w-4xl rounded-2xl border border-slate-800/10 bg-gradient-to-r from-slate-950 via-slate-900 to-teal-900/95 px-4 py-3 shadow-md">
             <p className="text-xs sm:text-sm font-semibold text-cyan-100">
               Designed &amp; Developed by{" "}
-              <span className="text-amber-300">Mosanna Jalal (MJX Cinematix Studio)</span>
+              <span className="text-amber-300">Mosanna Jalal (MJX Web Studio)</span>
             </p>
             <p className="mt-1 text-[11px] sm:text-xs text-slate-200/90">
               © 2026 GBM Fest Entry Console. All Rights Reserved.

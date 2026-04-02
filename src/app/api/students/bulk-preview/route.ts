@@ -71,6 +71,12 @@ export async function POST(request: NextRequest) {
         action === "ENTRY" && latestEntryByPass.get(passNo)?.action === "ENTRY",
       blockedForExit:
         action === "EXIT" && latestEntryByPass.get(passNo)?.action !== "ENTRY",
+      movementWarning:
+        action === "ENTRY" && latestEntryByPass.get(passNo)?.action === "ENTRY"
+          ? "Continuous ENTRY detected"
+          : action === "EXIT" && latestEntryByPass.get(passNo)?.action !== "ENTRY"
+            ? "Continuous/invalid EXIT detected"
+            : null,
       student: {
         _id: student._id,
         serialNo: student.serialNo,

@@ -22,6 +22,7 @@ type Student = {
     operatorUsername: string;
     createdAt: string;
   }>;
+  hasConsecutiveSameAction?: boolean;
 };
 
 type LastEntry = {
@@ -38,6 +39,7 @@ type PreviewRow = {
   gateStatus?: "NOT_ENTERED" | "INSIDE" | "OUTSIDE";
   blockedForEntry?: boolean;
   blockedForExit?: boolean;
+  movementWarning?: string | null;
   student?: Student;
 };
 
@@ -264,12 +266,12 @@ export default function DashboardClient({
       }
 
       const missing = data.missingPassNos?.length ? ` Missing: ${data.missingPassNos.join(", ")}` : "";
-      const blocked = data.blockedPassNos?.length
-        ? ` Blocked (already entered): ${data.blockedPassNos.join(", ")}`
-        : "";
-      const blockedExit = data.blockedExitPassNos?.length
-        ? ` Blocked (cannot exit without active entry): ${data.blockedExitPassNos.join(", ")}`
-        : "";
+    const blocked = data.blockedPassNos?.length
+      ? ` Blocked (continuous ENTRY): ${data.blockedPassNos.join(", ")}`
+      : "";
+    const blockedExit = data.blockedExitPassNos?.length
+      ? ` Blocked (continuous/invalid EXIT): ${data.blockedExitPassNos.join(", ")}`
+      : "";
       const invalidHint = data.missingPassNos?.length
         ? ` Invalid pass no. Add pass no.: ${data.missingPassNos.join(", ")}`
         : "";
@@ -419,6 +421,11 @@ export default function DashboardClient({
                       <summary className="cursor-pointer text-xs font-semibold text-slate-700">
                         Timeline ({student.timeline.length})
                       </summary>
+                      {student.hasConsecutiveSameAction ? (
+                        <p className="mt-1 text-[11px] text-amber-700">
+                          Continuous same movement was detected and auto-filtered in timeline view.
+                        </p>
+                      ) : null}
                       <div className="mt-2 space-y-1 border-t border-slate-100 pt-2">
                         {student.timeline.map((event, idx) => (
                           <p key={`${event.passNo}-${event.createdAt}-${idx}`} className="text-xs text-slate-600">
@@ -588,10 +595,13 @@ export default function DashboardClient({
                         </p>
                       ) : null}
                       {row.blockedForEntry ? (
-                        <p className="text-[var(--danger)] font-semibold">Blocked: already entered (inside gate)</p>
+                        <p className="text-[var(--danger)] font-semibold">Blocked: continuous ENTRY detected.</p>
                       ) : null}
                       {row.blockedForExit ? (
-                        <p className="text-[var(--danger)] font-semibold">Blocked: cannot exit before valid entry.</p>
+                        <p className="text-[var(--danger)] font-semibold">Blocked: continuous/invalid EXIT detected.</p>
+                      ) : null}
+                      {row.movementWarning ? (
+                        <p className="text-amber-700 font-semibold">{row.movementWarning}</p>
                       ) : null}
                     </div>
                   ) : (
