@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/routeAuth";
 import { StudentModel } from "@/models/student";
 import { syncStudentTextExport } from "@/lib/exportText";
+import { normalizeNameAndClassRoll } from "@/lib/normalizeStudent";
 
 export const runtime = "nodejs";
 
@@ -45,9 +46,8 @@ export async function PUT(
   const student = await StudentModel.findByIdAndUpdate(
     id,
     {
+      ...normalizeNameAndClassRoll(body.name, body.classRoll),
       serialNo: Number(body.serialNo) || 0,
-      name: body.name.trim(),
-      classRoll: body.classRoll.trim(),
       passNumbers,
       phoneNo: body.phoneNo.trim(),
       notes: body.notes?.trim() || "",

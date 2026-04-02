@@ -1,5 +1,6 @@
 import initialStudents from "../../data/initial_students.json";
 import { syncStudentTextExport } from "@/lib/exportText";
+import { normalizeNameAndClassRoll } from "@/lib/normalizeStudent";
 import { AdminModel } from "@/models/admin";
 import { StudentModel } from "@/models/student";
 
@@ -43,18 +44,41 @@ export async function ensureBootstrap() {
   }
 
   const count = await StudentModel.estimatedDocumentCount();
+  let needsTextSync = false;
+
   if (count === 0) {
-    const docs = (initialStudents as SeedStudent[]).map((student) => ({
+    const docs = (initialStudents as SeedStudent[]).map((student) => {
+      const normalized = normalizeNameAndClassRoll(student.name, student.classRoll);
+      return {
       ...student,
+      name: normalized.name,
+      classRoll: normalized.classRoll,
       notes: "",
       source: "pdf-import",
       updatedBy: "system",
-    }));
+      };
+    });
 
     if (docs.length) {
       await StudentModel.insertMany(docs, { ordered: false });
-      await syncStudentTextExport();
+      needsTextSync = true;
     }
+  }
+
+  const existingStudents = await StudentModel.find().lean();
+  for (const student of existingStudents) {
+    const normalized = normalizeNameAndClassRoll(student.name, student.classRoll);
+    if (!normalized.changed) continue;
+
+    await StudentModel.updateOne(
+      { _id: student._id },
+      { $set: { name: normalized.name, classRoll: normalized.classRoll, updatedBy: "system" } }
+    );
+    needsTextSync = true;
+  }
+
+  if (needsTextSync) {
+    await syncStudentTextExport();
   }
 
   bootstrapped = true;

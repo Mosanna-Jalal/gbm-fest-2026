@@ -3,6 +3,7 @@ import { requireAuth } from "@/lib/routeAuth";
 import { StudentModel } from "@/models/student";
 import { syncStudentTextExport } from "@/lib/exportText";
 import { EntryModel } from "@/models/entry";
+import { normalizeNameAndClassRoll } from "@/lib/normalizeStudent";
 
 export const runtime = "nodejs";
 
@@ -145,8 +146,7 @@ export async function POST(request: NextRequest) {
 
   const student = await StudentModel.create({
     serialNo,
-    name: body.name.trim(),
-    classRoll: body.classRoll.trim(),
+    ...normalizeNameAndClassRoll(body.name, body.classRoll),
     passNumbers: passNos,
     phoneNo: body.phoneNo.trim(),
     notes: body.notes?.trim() || "",
