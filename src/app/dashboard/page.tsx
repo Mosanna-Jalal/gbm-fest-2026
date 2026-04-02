@@ -3,7 +3,6 @@ import DashboardClient from "@/components/DashboardClient";
 import { connectToDatabase } from "@/lib/db";
 import { ensureBootstrap } from "@/lib/bootstrap";
 import { getServerAuthUser } from "@/lib/auth";
-import { StudentModel } from "@/models/student";
 import { EntryModel } from "@/models/entry";
 import { getCurrentDateInIST, getDayLock } from "@/lib/festDay";
 
@@ -40,10 +39,9 @@ export default async function DashboardPage({
     redirect(`/dashboard?festDay=${allowedDay}`);
   }
 
-  const [initialStudents, latestEntry] = await Promise.all([
-    StudentModel.find().sort({ serialNo: 1, createdAt: 1 }).limit(50).lean(),
-    EntryModel.findOne({ operatorUsername: user.username }).sort({ createdAt: -1 }).lean(),
-  ]);
+  const latestEntry = await EntryModel.findOne({ operatorUsername: user.username })
+    .sort({ createdAt: -1 })
+    .lean();
 
   const initialLastEntries = latestEntry?.batchId
     ? await EntryModel.find({ operatorUsername: user.username, batchId: latestEntry.batchId })
@@ -74,7 +72,7 @@ export default async function DashboardPage({
   return (
     <DashboardClient
       username={user.username}
-      initialStudents={JSON.parse(JSON.stringify(initialStudents))}
+      initialStudents={[]}
       initialLastEntries={JSON.parse(JSON.stringify(initialLastEntries))}
       initialFestDay={initialFestDay}
       lockedDay={allowedDay}

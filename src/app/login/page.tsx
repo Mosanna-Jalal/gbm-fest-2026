@@ -33,13 +33,13 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen p-4 sm:p-8 flex items-center justify-center">
+    <main className="min-h-screen p-3 sm:p-8 flex items-center justify-center">
       <div className="w-full max-w-md rounded-2xl bg-[var(--card)] shadow-xl shadow-slate-200/70 border border-white/70 p-6 sm:p-8">
         <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)] font-semibold">GBM FEST 2026</p>
         <h1 className="text-2xl sm:text-3xl font-bold mt-2">Gate Entry Admin Login</h1>
         <p className="text-sm text-slate-600 mt-2">Use one of 4 admin accounts to operate on any phone.</p>
 
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+        <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
           <label className="block text-sm font-medium">
             Username
             <input
