@@ -139,6 +139,25 @@ export default function DashboardClient({
     return { found, notFound: previewRows.length - found };
   }, [previewRows]);
 
+  const previewBlockedMessage = useMemo(() => {
+    const blockedEntryPasses = previewRows
+      .filter((row) => row.blockedForEntry)
+      .map((row) => row.passNo);
+    const blockedExitPasses = previewRows
+      .filter((row) => row.blockedForExit)
+      .map((row) => row.passNo);
+
+    const parts: string[] = [];
+    if (blockedEntryPasses.length) {
+      parts.push(`Continuous ENTRY blocked: ${blockedEntryPasses.join(", ")}`);
+    }
+    if (blockedExitPasses.length) {
+      parts.push(`Continuous/invalid EXIT blocked: ${blockedExitPasses.join(", ")}`);
+    }
+
+    return parts.join(" | ");
+  }, [previewRows]);
+
   async function loadStudents(searchQuery?: string, day?: "2026-04-06" | "2026-04-07") {
     const search = searchQuery ?? query;
     const selectedDay = day ?? festDay;
@@ -548,6 +567,10 @@ export default function DashboardClient({
               value={bulkPassNos}
               onChange={(event) => setBulkPassNos(event.target.value)}
             />
+
+            {previewBlockedMessage ? (
+              <p className="mt-3 text-xs font-semibold text-red-700">{previewBlockedMessage}</p>
+            ) : null}
 
             <div className="mt-3 grid grid-cols-1 sm:flex sm:flex-wrap gap-2">
               <select
