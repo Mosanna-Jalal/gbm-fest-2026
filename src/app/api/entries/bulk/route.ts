@@ -65,6 +65,7 @@ export async function POST(request: NextRequest) {
   }
 
   const blockedAlreadyInside: string[] = [];
+  const blockedInvalidExit: string[] = [];
 
   const logsToCreate = passNos
     .map((passNo) => {
@@ -74,6 +75,10 @@ export async function POST(request: NextRequest) {
       const latest = latestEntryByPass.get(passNo);
       if (body.action === "ENTRY" && latest?.action === "ENTRY") {
         blockedAlreadyInside.push(passNo);
+        return null;
+      }
+      if (body.action === "EXIT" && (!latest || latest.action !== "ENTRY")) {
+        blockedInvalidExit.push(passNo);
         return null;
       }
 
@@ -98,6 +103,7 @@ export async function POST(request: NextRequest) {
     createdCount: createdLogs.length,
     missingPassNos,
     blockedPassNos: blockedAlreadyInside,
+    blockedExitPassNos: blockedInvalidExit,
     createdLogs,
     batchId,
   });

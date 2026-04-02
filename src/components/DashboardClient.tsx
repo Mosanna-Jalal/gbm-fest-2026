@@ -37,6 +37,7 @@ type PreviewRow = {
   status: "FOUND" | "NOT_FOUND";
   gateStatus?: "NOT_ENTERED" | "INSIDE" | "OUTSIDE";
   blockedForEntry?: boolean;
+  blockedForExit?: boolean;
   student?: Student;
 };
 
@@ -105,6 +106,7 @@ export default function DashboardClient({
   const router = useRouter();
 
   const [query, setQuery] = useState("");
+  const [hasSearched, setHasSearched] = useState(false);
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [lastEntries, setLastEntries] = useState<LastEntry[]>(initialLastEntries);
   const [message, setMessage] = useState("");
@@ -159,6 +161,7 @@ export default function DashboardClient({
 
   async function handleSearch(event: React.FormEvent) {
     event.preventDefault();
+    setHasSearched(true);
     await loadStudents();
   }
 
@@ -241,10 +244,13 @@ export default function DashboardClient({
     const blocked = data.blockedPassNos?.length
       ? ` Blocked (already entered): ${data.blockedPassNos.join(", ")}`
       : "";
+    const blockedExit = data.blockedExitPassNos?.length
+      ? ` Blocked (cannot exit without active entry): ${data.blockedExitPassNos.join(", ")}`
+      : "";
     const invalidHint = data.missingPassNos?.length
       ? ` Invalid pass no. Add pass no.: ${data.missingPassNos.join(", ")}`
       : "";
-    setMessage(`${data.createdCount} records submitted.${missing}${blocked}${invalidHint}`);
+    setMessage(`${data.createdCount} records submitted.${missing}${blocked}${blockedExit}${invalidHint}`);
     setPreviewRows([]);
     setBulkPassNos("");
     if (Array.isArray(data.createdLogs) && data.createdLogs.length) {
@@ -329,7 +335,13 @@ export default function DashboardClient({
                 className="flex-1 rounded-xl border border-slate-300 px-3 py-2"
                 placeholder="e.g. 0210 or 8102890923"
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  if (!event.target.value.trim()) {
+                    setHasSearched(false);
+                    setStudents([]);
+                  }
+                }}
               />
               <button className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto" type="submit">
                 Search
@@ -385,7 +397,7 @@ export default function DashboardClient({
                   )}
                 </div>
               ))}
-              {!students.length && query.trim() ? (
+              {!students.length && query.trim() && hasSearched ? (
                 <div className="rounded-xl border border-red-200 bg-red-50 p-3">
                   <p className="text-sm font-semibold text-red-700">Invalid pass no. / phone no.</p>
                   <p className="text-xs text-red-700 mt-1">Please add pass no. from the Add / Edit Buyer section.</p>
@@ -524,6 +536,9 @@ export default function DashboardClient({
                       ) : null}
                       {row.blockedForEntry ? (
                         <p className="text-[var(--danger)] font-semibold">Blocked: already entered (inside gate)</p>
+                      ) : null}
+                      {row.blockedForExit ? (
+                        <p className="text-[var(--danger)] font-semibold">Blocked: cannot exit before valid entry.</p>
                       ) : null}
                     </div>
                   ) : (

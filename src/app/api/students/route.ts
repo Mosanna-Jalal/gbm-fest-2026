@@ -77,6 +77,12 @@ export async function GET(request: NextRequest) {
     const history = student.passNumbers
       .flatMap((passNo) => timelineByPass.get(passNo) || [])
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .filter((entry, index, arr) => {
+        if (index === 0) return true;
+        const prev = arr[index - 1];
+        // Hide consecutive duplicate actions for same pass/day to keep timeline logical.
+        return !(prev.passNo === entry.passNo && prev.festDay === entry.festDay && prev.action === entry.action);
+      })
       .map((entry) => ({
         passNo: entry.passNo,
         action: entry.action,

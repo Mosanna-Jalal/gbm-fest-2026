@@ -69,6 +69,8 @@ export async function POST(request: NextRequest) {
             : ("NOT_ENTERED" as const),
       blockedForEntry:
         action === "ENTRY" && latestEntryByPass.get(passNo)?.action === "ENTRY",
+      blockedForExit:
+        action === "EXIT" && latestEntryByPass.get(passNo)?.action !== "ENTRY",
       student: {
         _id: student._id,
         serialNo: student.serialNo,
