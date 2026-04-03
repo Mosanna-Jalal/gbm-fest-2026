@@ -5,6 +5,7 @@ import { ensureBootstrap } from "@/lib/bootstrap";
 import { getServerAuthUser } from "@/lib/auth";
 import { StudentModel } from "@/models/student";
 import { EntryModel } from "@/models/entry";
+import StudentsFilters from "@/components/StudentsFilters";
 
 export const dynamic = "force-dynamic";
 
@@ -107,36 +108,7 @@ export default async function StudentsPage({
 
         <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50/70 p-3">
           <p className="text-xs font-semibold text-slate-700">Filter by status</p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {(["2026-04-06", "2026-04-07"] as FestDay[]).map((day) => (
-              <Link
-                key={day}
-                href={`/students?day=${day}&status=${selectedStatus}`}
-                className={`rounded-full px-3 py-1 text-xs font-semibold border ${
-                  selectedDay === day
-                    ? "bg-[var(--accent)] text-white border-[var(--accent)]"
-                    : "bg-white text-slate-700 border-slate-300"
-                }`}
-              >
-                {day === "2026-04-06" ? "Day 1" : "Day 2"}
-              </Link>
-            ))}
-          </div>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {(["ALL", "NOT_ENTERED", "INSIDE", "OUTSIDE"] as StatusFilter[]).map((status) => (
-              <Link
-                key={status}
-                href={`/students?day=${selectedDay}&status=${status}`}
-                className={`rounded-full px-3 py-1 text-xs font-semibold border ${
-                  selectedStatus === status
-                    ? "bg-slate-900 text-white border-slate-900"
-                    : "bg-white text-slate-700 border-slate-300"
-                }`}
-              >
-                {status === "ALL" ? "All" : statusLabel[status]}
-              </Link>
-            ))}
-          </div>
+          <StudentsFilters selectedDay={selectedDay} selectedStatus={selectedStatus} />
         </div>
 
         <div className="mt-4 overflow-auto rounded-xl border border-slate-200">
