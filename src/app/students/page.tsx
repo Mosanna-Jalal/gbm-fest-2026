@@ -10,6 +10,7 @@ export const dynamic = "force-dynamic";
 
 type StatusFilter = "ALL" | "NOT_ENTERED" | "INSIDE" | "OUTSIDE";
 type FestDay = "2026-04-06" | "2026-04-07";
+type StatusKey = "NOT_ENTERED" | "INSIDE" | "OUTSIDE";
 
 export default async function StudentsPage({
   searchParams,
@@ -54,7 +55,7 @@ export default async function StudentsPage({
   function getStatus(
     studentPassNos: string[],
     latestByPass: Map<string, (typeof day1Entries)[number]>
-  ) {
+  ): StatusKey {
     const latest = studentPassNos
       .map((passNo) => latestByPass.get(passNo))
       .filter((entry): entry is NonNullable<(typeof day1Entries)[number]> => Boolean(entry))
@@ -68,13 +69,13 @@ export default async function StudentsPage({
     NOT_ENTERED: "bg-slate-100 text-slate-700",
     INSIDE: "bg-emerald-100 text-emerald-700",
     OUTSIDE: "bg-orange-100 text-orange-700",
-  } as const;
+  } satisfies Record<StatusKey, string>;
 
   const statusLabel = {
     NOT_ENTERED: "Not Entered",
     INSIDE: "Inside",
     OUTSIDE: "Gone Outside",
-  } as const;
+  } satisfies Record<StatusKey, string>;
 
   const rows = students.map((student) => {
     const day1Status = getStatus(student.passNumbers, latestDay1ByPass);
