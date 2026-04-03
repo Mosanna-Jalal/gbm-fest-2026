@@ -132,6 +132,7 @@ export default function DashboardClient({
   const [bulkPassNos, setBulkPassNos] = useState("");
   const [bulkAction, setBulkAction] = useState<"ENTRY" | "EXIT">("ENTRY");
   const [festDay, setFestDay] = useState<"2026-04-06" | "2026-04-07">(initialFestDay);
+  const [isSwitchingDay, setIsSwitchingDay] = useState(false);
   const [previewRows, setPreviewRows] = useState<PreviewRow[]>([]);
   const [blockedAlert, setBlockedAlert] = useState("");
 
@@ -354,17 +355,20 @@ export default function DashboardClient({
                 key={day}
                 onClick={() => {
                   if (lockedDay && lockedDay !== day) return;
+                  setIsSwitchingDay(true);
                   setFestDay(day);
                   if (query.trim()) {
-                    void loadStudents(query, day);
+                    void loadStudents(query, day).finally(() => setIsSwitchingDay(false));
+                    return;
                   }
+                  setTimeout(() => setIsSwitchingDay(false), 350);
                 }}
-                disabled={Boolean(lockedDay && lockedDay !== day)}
+                disabled={Boolean(lockedDay && lockedDay !== day) || isSwitchingDay}
                 className={`rounded-xl px-3 py-2 text-xs sm:text-sm font-semibold ${
                   festDay === day ? "bg-[var(--accent)] text-white" : "bg-white border border-slate-300"
                 } ${lockedDay && lockedDay !== day ? "opacity-40 cursor-not-allowed" : ""}`}
               >
-                {dayLabels[day]}
+                {isSwitchingDay && festDay === day ? "Loading..." : dayLabels[day]}
               </button>
             ))}
           </div>

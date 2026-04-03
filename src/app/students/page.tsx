@@ -8,7 +8,14 @@ import { EntryModel } from "@/models/entry";
 
 export const dynamic = "force-dynamic";
 
-export default async function StudentsPage() {
+type StatusFilter = "ALL" | "NOT_ENTERED" | "INSIDE" | "OUTSIDE";
+type FestDay = "2026-04-06" | "2026-04-07";
+
+export default async function StudentsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string; day?: string }>;
+}) {
   await connectToDatabase();
   await ensureBootstrap();
 
@@ -16,6 +23,15 @@ export default async function StudentsPage() {
   if (!user) {
     redirect("/login");
   }
+
+  const params = await searchParams;
+  const selectedDay: FestDay = params.day === "2026-04-07" ? "2026-04-07" : "2026-04-06";
+  const selectedStatus: StatusFilter =
+    params.status === "NOT_ENTERED" ||
+    params.status === "INSIDE" ||
+    params.status === "OUTSIDE"
+      ? params.status
+      : "ALL";
 
   const students = await StudentModel.find().sort({ serialNo: 1, createdAt: 1 }).lean();
   const allPassNos = students.flatMap((student) => student.passNumbers);
@@ -60,6 +76,18 @@ export default async function StudentsPage() {
     OUTSIDE: "Gone Outside",
   } as const;
 
+  const rows = students.map((student) => {
+    const day1Status = getStatus(student.passNumbers, latestDay1ByPass);
+    const day2Status = getStatus(student.passNumbers, latestDay2ByPass);
+    const selectedDayStatus = selectedDay === "2026-04-06" ? day1Status : day2Status;
+    return { student, day1Status, day2Status, selectedDayStatus };
+  });
+
+  const filteredRows =
+    selectedStatus === "ALL"
+      ? rows
+      : rows.filter((row) => row.selectedDayStatus === selectedStatus);
+
   return (
     <main className="min-h-screen p-3 sm:p-6">
       <section className="max-w-6xl mx-auto rounded-2xl bg-white/95 border border-white shadow-xl p-4 sm:p-6">
@@ -67,11 +95,47 @@ export default async function StudentsPage() {
           <div>
             <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--accent)]">Record View</p>
             <h1 className="text-lg sm:text-2xl font-bold">Full Pass List</h1>
-            <p className="text-xs text-slate-600 mt-1">Total records: {students.length}</p>
+            <p className="text-xs text-slate-600 mt-1">
+              Showing: {filteredRows.length} / {students.length} records
+            </p>
           </div>
           <Link href="/select-day" className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-center">
             Back to Dashboard
           </Link>
+        </div>
+
+        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50/70 p-3">
+          <p className="text-xs font-semibold text-slate-700">Filter by status</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {(["2026-04-06", "2026-04-07"] as FestDay[]).map((day) => (
+              <Link
+                key={day}
+                href={`/students?day=${day}&status=${selectedStatus}`}
+                className={`rounded-full px-3 py-1 text-xs font-semibold border ${
+                  selectedDay === day
+                    ? "bg-[var(--accent)] text-white border-[var(--accent)]"
+                    : "bg-white text-slate-700 border-slate-300"
+                }`}
+              >
+                {day === "2026-04-06" ? "Day 1" : "Day 2"}
+              </Link>
+            ))}
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {(["ALL", "NOT_ENTERED", "INSIDE", "OUTSIDE"] as StatusFilter[]).map((status) => (
+              <Link
+                key={status}
+                href={`/students?day=${selectedDay}&status=${status}`}
+                className={`rounded-full px-3 py-1 text-xs font-semibold border ${
+                  selectedStatus === status
+                    ? "bg-slate-900 text-white border-slate-900"
+                    : "bg-white text-slate-700 border-slate-300"
+                }`}
+              >
+                {status === "ALL" ? "All" : statusLabel[status]}
+              </Link>
+            ))}
+          </div>
         </div>
 
         <div className="mt-4 overflow-auto rounded-xl border border-slate-200">
@@ -88,10 +152,7 @@ export default async function StudentsPage() {
               </tr>
             </thead>
             <tbody>
-              {students.map((student) => {
-                const day1Status = getStatus(student.passNumbers, latestDay1ByPass);
-                const day2Status = getStatus(student.passNumbers, latestDay2ByPass);
-
+              {filteredRows.map(({ student, day1Status, day2Status }) => {
                 return (
                   <tr key={String(student._id)} className="border-t border-slate-100 text-sm">
                     <td className="px-3 py-2">{student.serialNo}</td>
