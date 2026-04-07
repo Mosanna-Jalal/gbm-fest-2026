@@ -49,6 +49,7 @@ export async function GET(request: NextRequest) {
     .map((e) => e.passNo);
 
   const day1StatusByPass = new Map<string, "NOT_ENTERED" | "INSIDE" | "OUTSIDE">();
+  const day1TimeByPass = new Map<string, string | null>();
 
   if (day2PassNos.length) {
     const day1Entries = await EntryModel.find({
@@ -61,12 +62,14 @@ export async function GET(request: NextRequest) {
     for (const entry of day1Entries) {
       if (!day1StatusByPass.has(entry.passNo)) {
         day1StatusByPass.set(entry.passNo, entry.action === "ENTRY" ? "INSIDE" : "OUTSIDE");
+        day1TimeByPass.set(entry.passNo, String(entry.createdAt));
       }
     }
 
     for (const passNo of day2PassNos) {
       if (!day1StatusByPass.has(passNo)) {
         day1StatusByPass.set(passNo, "NOT_ENTERED");
+        day1TimeByPass.set(passNo, null);
       }
     }
   }
@@ -74,6 +77,7 @@ export async function GET(request: NextRequest) {
   const enrichedEntries = entries.map((entry) => ({
     ...entry,
     day1GateStatus: entry.festDay === "2026-04-07" ? (day1StatusByPass.get(entry.passNo) ?? null) : null,
+    day1LastActionTime: entry.festDay === "2026-04-07" ? (day1TimeByPass.get(entry.passNo) ?? null) : null,
   }));
 
   return NextResponse.json({ entries: enrichedEntries });

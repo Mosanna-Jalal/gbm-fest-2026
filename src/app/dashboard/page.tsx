@@ -43,7 +43,7 @@ export default async function DashboardPage({
     .sort({ createdAt: -1 })
     .lean();
 
-  const initialLastEntries = latestEntry?.batchId
+  const rawLastEntries = latestEntry?.batchId
     ? await EntryModel.find({ operatorUsername: user.username, batchId: latestEntry.batchId })
         .sort({ createdAt: -1 })
         .lean()
@@ -68,6 +68,42 @@ export default async function DashboardPage({
           return groupedLegacyBatch.length ? groupedLegacyBatch : [latestEntry];
         })()
       : [];
+
+  const day2PassNos = rawLastEntries
+    .filter((e) => e.festDay === "2026-04-07")
+    .map((e) => e.passNo);
+
+  const day1StatusByPass = new Map<string, "NOT_ENTERED" | "INSIDE" | "OUTSIDE">();
+  const day1TimeByPass = new Map<string, string | null>();
+
+  if (day2PassNos.length) {
+    const day1Entries = await EntryModel.find({
+      passNo: { $in: day2PassNos },
+      festDay: "2026-04-06",
+    })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    for (const entry of day1Entries) {
+      if (!day1StatusByPass.has(entry.passNo)) {
+        day1StatusByPass.set(entry.passNo, entry.action === "ENTRY" ? "INSIDE" : "OUTSIDE");
+        day1TimeByPass.set(entry.passNo, String(entry.createdAt));
+      }
+    }
+
+    for (const passNo of day2PassNos) {
+      if (!day1StatusByPass.has(passNo)) {
+        day1StatusByPass.set(passNo, "NOT_ENTERED");
+        day1TimeByPass.set(passNo, null);
+      }
+    }
+  }
+
+  const initialLastEntries = rawLastEntries.map((entry) => ({
+    ...entry,
+    day1GateStatus: entry.festDay === "2026-04-07" ? (day1StatusByPass.get(entry.passNo) ?? null) : null,
+    day1LastActionTime: entry.festDay === "2026-04-07" ? (day1TimeByPass.get(entry.passNo) ?? null) : null,
+  }));
 
   return (
     <DashboardClient

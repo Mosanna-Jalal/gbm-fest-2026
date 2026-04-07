@@ -31,6 +31,7 @@ type LastEntry = {
   festDay: "2026-04-06" | "2026-04-07";
   createdAt: string;
   day1GateStatus?: "NOT_ENTERED" | "INSIDE" | "OUTSIDE" | null;
+  day1LastActionTime?: string | null;
 };
 
 type PreviewRow = {
@@ -319,12 +320,20 @@ export default function DashboardClient({
 
   return (
     <main className="min-h-screen p-2 sm:p-6">
+      <div className="max-w-6xl mx-auto mb-2 flex items-center justify-between rounded-xl bg-[var(--accent-deep)] px-4 py-2">
+        <p className="text-[11px] text-white/80">
+          GBM Fest Entry Console
+        </p>
+        <p className="text-[11px] text-white/90 font-medium">
+          Logged in as <span className="font-bold text-white">{username}</span>
+        </p>
+      </div>
       <section className="max-w-6xl mx-auto rounded-2xl sm:rounded-3xl glass-card p-3 sm:p-6 space-y-5 sm:space-y-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--accent)]">Centralized Gate Control</p>
             <h1 className="text-lg sm:text-2xl font-bold">GBM Fest Entry Recorder</h1>
-            <p className="text-xs text-slate-600 mt-1">Logged in as {username}. Last record panel is private per admin.</p>
+            <p className="text-xs text-slate-600 mt-1">Last record panel is private per admin.</p>
           </div>
           <div className="grid grid-cols-1 sm:flex gap-2 w-full sm:w-auto">
             <button
@@ -663,19 +672,33 @@ export default function DashboardClient({
             {lastEntries.length ? (
               <div className="mt-3 space-y-2 max-h-64 overflow-auto">
                 {lastEntries.map((entry, index) => (
-                  <div key={`${entry.passNo}-${entry.createdAt}-${index}`} className="rounded-xl bg-white border border-slate-200 p-3">
-                    <p className="font-semibold">{entry.studentName}</p>
-                    <p className="text-xs text-slate-600">Pass: {entry.passNo}</p>
-                    <p className="text-xs text-slate-600">Day: {dayLabels[entry.festDay]}</p>
-                    <p className={`inline-flex mt-2 rounded-full px-2 py-1 text-xs font-bold ${actionColors[entry.action]}`}>
-                      {entry.action}
-                    </p>
+                  <div key={`${entry.passNo}-${entry.createdAt}-${index}`} className="rounded-xl bg-white border border-slate-200 p-3 space-y-2">
+                    <div>
+                      <p className="font-semibold">{entry.studentName}</p>
+                      <p className="text-xs text-slate-500">Pass: {entry.passNo}</p>
+                    </div>
+                    <div className="rounded-lg bg-slate-50 border border-slate-100 px-3 py-2 space-y-1">
+                      <p className="text-[10px] uppercase tracking-widest font-semibold text-slate-400">{dayLabels[entry.festDay]} · recorded now</p>
+                      <div className="flex items-center gap-2">
+                        <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-bold ${actionColors[entry.action]}`}>
+                          {entry.action}
+                        </span>
+                        <span className="text-xs text-slate-500">{formatDateTime(entry.createdAt)}</span>
+                      </div>
+                    </div>
                     {entry.festDay === "2026-04-07" && entry.day1GateStatus ? (
-                      <p className={`text-xs mt-1 font-medium ${gateStatusClass[entry.day1GateStatus]}`}>
-                        Day 1: {gateStatusLabel[entry.day1GateStatus]}
-                      </p>
+                      <div className="rounded-lg bg-slate-50 border border-slate-100 px-3 py-2 space-y-1">
+                        <p className="text-[10px] uppercase tracking-widest font-semibold text-slate-400">Day 1 (yesterday) · last status</p>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-xs font-semibold ${gateStatusClass[entry.day1GateStatus]}`}>
+                            {gateStatusLabel[entry.day1GateStatus]}
+                          </span>
+                          {entry.day1LastActionTime ? (
+                            <span className="text-xs text-slate-500">{formatDateTime(entry.day1LastActionTime)}</span>
+                          ) : null}
+                        </div>
+                      </div>
                     ) : null}
-                    <p className="text-xs text-slate-500 mt-2">{formatDateTime(entry.createdAt)}</p>
                   </div>
                 ))}
               </div>
