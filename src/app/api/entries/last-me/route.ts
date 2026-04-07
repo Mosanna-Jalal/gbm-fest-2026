@@ -44,5 +44,37 @@ export async function GET(request: NextRequest) {
     entries = groupedLegacyBatch.length ? groupedLegacyBatch : [latestEntry];
   }
 
-  return NextResponse.json({ entries });
+  const day2PassNos = entries
+    .filter((e) => e.festDay === "2026-04-07")
+    .map((e) => e.passNo);
+
+  const day1StatusByPass = new Map<string, "NOT_ENTERED" | "INSIDE" | "OUTSIDE">();
+
+  if (day2PassNos.length) {
+    const day1Entries = await EntryModel.find({
+      passNo: { $in: day2PassNos },
+      festDay: "2026-04-06",
+    })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    for (const entry of day1Entries) {
+      if (!day1StatusByPass.has(entry.passNo)) {
+        day1StatusByPass.set(entry.passNo, entry.action === "ENTRY" ? "INSIDE" : "OUTSIDE");
+      }
+    }
+
+    for (const passNo of day2PassNos) {
+      if (!day1StatusByPass.has(passNo)) {
+        day1StatusByPass.set(passNo, "NOT_ENTERED");
+      }
+    }
+  }
+
+  const enrichedEntries = entries.map((entry) => ({
+    ...entry,
+    day1GateStatus: entry.festDay === "2026-04-07" ? (day1StatusByPass.get(entry.passNo) ?? null) : null,
+  }));
+
+  return NextResponse.json({ entries: enrichedEntries });
 }

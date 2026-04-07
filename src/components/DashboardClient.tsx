@@ -30,6 +30,7 @@ type LastEntry = {
   action: "ENTRY" | "EXIT";
   festDay: "2026-04-06" | "2026-04-07";
   createdAt: string;
+  day1GateStatus?: "NOT_ENTERED" | "INSIDE" | "OUTSIDE" | null;
 };
 
 type PreviewRow = {
@@ -297,11 +298,7 @@ export default function DashboardClient({
       }
       setPreviewRows([]);
       setBulkPassNos("");
-      if (Array.isArray(data.createdLogs) && data.createdLogs.length) {
-        setLastEntries(data.createdLogs);
-      } else {
-        await loadLastEntry();
-      }
+      await loadLastEntry();
     } finally {
       setIsRecordingMovement(false);
     }
@@ -673,6 +670,11 @@ export default function DashboardClient({
                     <p className={`inline-flex mt-2 rounded-full px-2 py-1 text-xs font-bold ${actionColors[entry.action]}`}>
                       {entry.action}
                     </p>
+                    {entry.festDay === "2026-04-07" && entry.day1GateStatus ? (
+                      <p className={`text-xs mt-1 font-medium ${gateStatusClass[entry.day1GateStatus]}`}>
+                        Day 1: {gateStatusLabel[entry.day1GateStatus]}
+                      </p>
+                    ) : null}
                     <p className="text-xs text-slate-500 mt-2">{formatDateTime(entry.createdAt)}</p>
                   </div>
                 ))}
