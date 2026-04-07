@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import Link from "next/link";
+import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Student = {
@@ -115,6 +114,8 @@ export default function DashboardClient({
   const [isRecordingMovement, setIsRecordingMovement] = useState(false);
   const [isDownloadingText, setIsDownloadingText] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isNavigatingToList, setIsNavigatingToList] = useState(false);
+  const [toasts, setToasts] = useState<{ id: number; message: string; type: "success" | "error" }[]>([]);
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [lastEntries, setLastEntries] = useState<LastEntry[]>(initialLastEntries);
   const [message, setMessage] = useState("");
@@ -142,6 +143,12 @@ export default function DashboardClient({
   }, [previewRows]);
 
   const previewBlockedMessage = useMemo(() => getBlockedMessage(previewRows), [previewRows]);
+
+  const showToast = useCallback((message: string, type: "success" | "error") => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 3500);
+  }, []);
 
   async function loadStudents(searchQuery?: string, day?: "2026-04-06" | "2026-04-07") {
     const search = searchQuery ?? query;
@@ -206,11 +213,11 @@ export default function DashboardClient({
 
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        setMessage(data.error || "Failed to save pass details");
+        showToast(data.error || "Failed to save pass details", "error");
         return;
       }
 
-      setMessage(form.id ? "Pass details updated successfully." : "Pass details added successfully.");
+      showToast(form.id ? "Pass details updated successfully." : "Pass details added successfully.", "success");
       setForm({ id: "", serialNo: "", name: "", classRoll: "", passNumbers: "", phoneNo: "", notes: "" });
       await loadStudents();
     } finally {
@@ -323,12 +330,25 @@ export default function DashboardClient({
             <p className="text-xs text-slate-600 mt-1">Logged in as {username}. Last record panel is private per admin.</p>
           </div>
           <div className="grid grid-cols-1 sm:flex gap-2 w-full sm:w-auto">
-            <Link
-              href="/students"
-              className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50 text-center w-full sm:w-auto action-btn"
+            <button
+              type="button"
+              disabled={isNavigatingToList}
+              onClick={() => {
+                setIsNavigatingToList(true);
+                router.push("/students");
+              }}
+              className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50 text-center w-full sm:w-auto disabled:opacity-60 action-btn inline-flex items-center justify-center gap-2"
             >
-              Full List
-            </Link>
+              {isNavigatingToList ? (
+                <>
+                  <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Opening...
+                </>
+              ) : "Full List"}
+            </button>
             <button
               type="button"
               onClick={handleDownloadText}
@@ -521,11 +541,19 @@ export default function DashboardClient({
 
               <div className="grid grid-cols-1 sm:flex gap-2">
                 <button
-                  className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60 action-btn"
+                  className="rounded-xl bg-[var(--accent)] text-white px-4 py-2 font-semibold w-full sm:w-auto disabled:opacity-60 action-btn inline-flex items-center justify-center gap-2"
                   type="submit"
                   disabled={isSavingBuyer}
                 >
-                  {isSavingBuyer ? "Saving..." : form.id ? "Update Passes" : "Add Passes"}
+                  {isSavingBuyer ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      Saving...
+                    </>
+                  ) : form.id ? "Update Passes" : "Add Passes"}
                 </button>
                 {form.id ? (
                   <button
@@ -657,6 +685,28 @@ export default function DashboardClient({
 
         {message ? <p className="rounded-xl bg-[var(--accent-soft)] px-3 py-2 text-xs font-medium">{message}</p> : null}
       </section>
+
+      <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none">
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            className={`pointer-events-auto flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-white shadow-lg transition-all ${
+              toast.type === "success" ? "bg-[var(--accent)]" : "bg-[var(--danger)]"
+            }`}
+          >
+            {toast.type === "success" ? (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+            )}
+            {toast.message}
+          </div>
+        ))}
+      </div>
     </main>
   );
 }

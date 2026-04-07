@@ -1,19 +1,35 @@
 Pass:0155 | Name:Khushi Kumari | Class/Roll:4th Sem / 467 | Phone:8102890923 | Serial:1
 Pass:0156 | Name:Divyanshi Bharti | Class/Roll:4th Sem / 485 | Phone:7903565062 | Serial:2
+Pass:0404 | Name:Priya Kumari | Class/Roll:6th sem /827 | Phone:7489096942 | Serial:2
+Pass:0458 | Name:Muskan kumari | Class/Roll:6th/583 | Phone:7489096942 | Serial:2
 Pass:0157 | Name:Kashish Sinha | Class/Roll:2nd Sem / 570 | Phone:7644804835 | Serial:3
+Pass:0465 | Name:Saniya parveen | Class/Roll:6th/191 | Phone:7050104763 | Serial:3
 Pass:0158/0195 | Name:Sanjana Kumari | Class/Roll:2nd Sem / 572 | Phone:9430994762 | Serial:4
+Pass:0469 | Name:Aashiya parveen | Class/Roll:6th/564 | Phone:9204102293 | Serial:4
 Pass:0159 | Name:Shruti Kumari | Class/Roll:4th Sem / 587 | Phone:9060154112 | Serial:5
+Pass:0477 | Name:Ankita Kumari | Class/Roll:Evening | Phone:7462807485 | Serial:5
 Pass:0160 | Name:Kashish Singh | Class/Roll:4th Sem / 622 | Phone:9798904125 | Serial:6
+Pass:0481 | Name:Choti Kumari | Class/Roll:2nd/478 | Phone:9234716024 | Serial:6
+Pass:0481 | Name:Choti Kumari | Class/Roll:2nd/478 | Phone:9234716024 | Serial:6
 Pass:0161 | Name:Muskan Kumari | Class/Roll:2nd Sem / 420 | Phone:7763018919 | Serial:7
+Pass:0136 | Name:Kushi ranjan | Class/Roll:2nd/sem | Phone:6204029596 | Serial:7
+Pass:0136 | Name:Kushi ranjan | Class/Roll:2nd/sem | Phone:6204029596 | Serial:7
 Pass:0162 | Name:Jyoti Kumari | Class/Roll:2nd Sem / 545 | Phone:9204317946 | Serial:8
+Pass:0500 | Name:Ayushi kumari | Class/Roll:2nd/165 | Phone:8837506425 | Serial:8
 Pass:0163 | Name:Archana Kumari | Class/Roll:2nd Sem / 182 | Phone:9973879175 | Serial:9
+Pass:0334 | Name:Shristi kumari | Class/Roll:6th/445 | Phone:9693049228 | Serial:9
 Pass:0164 | Name:Sonam Kumari | Class/Roll:2nd Sem / 425 | Phone:9939621506 | Serial:10
+Pass:0333 | Name:Sandya | Class/Roll:6th/413 | Phone:6203569170 | Serial:10
+Pass:0333 | Name:Sandya | Class/Roll:6th/413 | Phone:6203569170 | Serial:10
 Pass:0165 | Name:Sabram Kumari | Class/Roll:4th Sem / 347 | Phone:9102605231 | Serial:11
+Pass:0332 | Name:Radhika kumari | Class/Roll:4th/593 | Phone:9229442733 | Serial:11
 Pass:0166 | Name:Kritika Raj | Class/Roll:2nd Sem / 415 | Phone:6201751397 | Serial:12
+Pass:0330 | Name:Anjali Kumari | Class/Roll:4th/267 | Phone:7488957548 | Serial:12
 Pass:0167 | Name:Shubhangi Mishra | Class/Roll:6th Sem / 90 | Phone:7870093310 | Serial:13
+Pass:0485 | Name:Sanjna Kumari | Class/Roll:2nd/12 | Phone:9279654355 | Serial:13
 Pass:0168 | Name:Aanchal Kumari | Class/Roll:6th Sem / NA | Phone:7209697149 | Serial:14
 Pass:0169 | Name:Joly Kumari | Class/Roll:6th Sem / NA | Phone:8797162127 | Serial:15
-Pass:0170 | Name:Pruti Kumari | Class/Roll:4th Sem / 59 | Phone:7396396541 | Serial:16
+Pass:0170 | Name:Priti Kumari | Class/Roll:4th Sem / 59 | Phone:7396396541 | Serial:16
 Pass:0171 | Name:Aakanksha Kur. | Class/Roll:6th Sem / 109 | Phone:6201382673 | Serial:17
 Pass:0172 | Name:Sweta Kumari | Class/Roll:6th Sem / 889 | Phone:9576621172 | Serial:18
 Pass:0173 | Name:Nancy | Class/Roll:2nd Sem / 69 | Phone:6204413927 | Serial:19
@@ -92,14 +108,14 @@ Pass:0298 | Name:Khushi | Class/Roll:4th Sem / 120 | Phone:8538942943 | Serial:9
 Pass:0299 | Name:Saloni Kri. | Class/Roll:4th Sem / 06 | Phone:7091409406 | Serial:92
 Pass:0300 | Name:Khushi Kri | Class/Roll:4th Sem / 136 | Phone:9229245919 | Serial:93
 Pass:0301 | Name:Soni Kri | Class/Roll:4th Sem / 472 | Phone:8252642406 | Serial:94
-Pass:0311 | Name:Jhoti Kri | Class/Roll:4th Sem / 422 | Phone:8603423065 | Serial:95
+Pass:0311 | Name:Shruti kumari | Class/Roll:4th Sem / 422 | Phone:8603423065 | Serial:95
 Pass:0312 | Name:Aarti Kri | Class/Roll:4th Sem / 513 | Phone:9199796502 | Serial:96
 Pass:0313 | Name:Nikita Kri | Class/Roll:4th Sem / 313 | Phone:9934224039 | Serial:97
 Pass:0314 | Name:Kittu | Class/Roll:2nd Sem / 588 | Phone:9931424506 | Serial:98
 Pass:0315 | Name:Muskan | Class/Roll:4th Sem / 273 | Phone:9341643902 | Serial:99
 Pass:0316 | Name:Varsha Kri | Class/Roll:4th Sem / 350 | Phone:7644011366 | Serial:100
 Pass:0318 | Name:Navya Raj | Class/Roll:2nd Sem / 477 | Phone:7367940112 | Serial:101
-Pass:0317 | Name:Khusboo Parween | Class/Roll:2nd Sem / 243 | Phone:8002179937 | Serial:102
+Pass:0317 | Name:Khusboo rani | Class/Roll:2nd Sem / 243 | Phone:8002179937 | Serial:102
 Pass:0309 | Name:Muskan Kri | Class/Roll:2nd Sem / 161 | Phone:7643981225 | Serial:103
 Pass:0306 | Name:Naina Kri | Class/Roll:2nd Sem / NA | Phone:7643981225 | Serial:104
 Pass:0307 | Name:Kirti Kri | Class/Roll:4th Sem / 195 | Phone:6204044480 | Serial:105
@@ -126,7 +142,7 @@ Pass:0384 | Name:Sanya Br. | Class/Roll:4th Sem / 635 | Phone:9060699071 | Seria
 Pass:0385 | Name:Shalu Singh | Class/Roll:3rd Sem / NA | Phone:9060699071 | Serial:126
 Pass:0387 | Name:Audhi Singh | Class/Roll:4th Sem / 169 | Phone:7543868455 | Serial:127
 Pass:0386 | Name:Aarti Kri | Class/Roll:4th Sem / 711 | Phone:8825148537 | Serial:128
-Pass:0388 | Name:Rani Kri | Class/Roll:4th Sem / 371 | Phone:7541097431 | Serial:129
+Pass:0150 | Name:Mosanna Jalal | Class/Roll:Office | Phone:9065401524 | Serial:129
 Pass:0389 | Name:Sehani Sinha | Class/Roll:4th Sem / 103 | Phone:7645007403 | Serial:130
 Pass:0393 | Name:Madhuri Kri | Class/Roll:2nd Sem / 694 | Phone:9199017927 | Serial:131
 Pass:0392 | Name:Khushi Kri | Class/Roll:6th Sem / 543 | Phone:9955350995 | Serial:132
@@ -142,7 +158,7 @@ Pass:0387 | Name:Sweety Mohan | Class/Roll:4th Sem / 694 | Phone:8092793767 | Se
 Pass:0366 | Name:Shivangi Kri | Class/Roll:2nd Sem / 418 | Phone:9006985027 | Serial:142
 Pass:0358 | Name:Anushika Sharma | Class/Roll:6th Sem / 633 | Phone:8294034778 | Serial:143
 Pass:0359 | Name:Dolon Singh | Class/Roll:4th Sem / 774 | Phone:7033843485 | Serial:144
-Pass:0361 | Name:Satabdi Kri | Class/Roll:6th Sem / 01 | Phone:9572971089 | Serial:145
+Pass:0361 | Name:Sonali kumari | Class/Roll:6th Sem / 01 | Phone:9572971089 | Serial:145
 Pass:0353 | Name:Nikit Rajput | Class/Roll:6th Sem / 04 | Phone:8271370704 | Serial:146
 Pass:0354 | Name:Riya Singh | Class/Roll:6th Sem / 07 | Phone:9341637165 | Serial:147
 Pass:0360 | Name:Astha Rani | Class/Roll:6th Sem / 94 | Phone:8809686035 | Serial:148
@@ -163,3 +179,98 @@ Pass:0247 | Name:Aisha Khatoon | Class/Roll:4th Sem / 817 | Phone:8084573934 | S
 Pass:0346 | Name:Sweta Kumari | Class/Roll:6th Sem / 302 | Phone:8235841449 | Serial:163
 Pass:0339 | Name:Aakansha Kumari | Class/Roll:6th Sem / 134 | Phone:9229269605 | Serial:164
 Pass:0337 | Name:Sakshi Kumari | Class/Roll:4th Sem / 07 | Phone:6207277168 | Serial:165
+Pass:0328 | Name:Aaprupa kumari | Class/Roll:2nd/76 | Phone:7667238619 | Serial:166
+Pass:0338 | Name:Shilpi kumari | Class/Roll:2nd | Phone:9142896357 | Serial:167
+Pass:0345 | Name:Nishu kumari | Class/Roll:2nd | Phone:9771608362 | Serial:168
+Pass:0325 | Name:Rimjim | Class/Roll:2nd | Phone:9508320357 | Serial:169
+Pass:0329 | Name:Shurti kumari | Class/Roll:4th | Phone:907854112 | Serial:170
+Pass:0341 | Name:Shuman kumari | Class/Roll:Ncc | Phone:7260967904 | Serial:171
+Pass:0324 | Name:Astha kumari | Class/Roll:Ncc | Phone:8809683775 | Serial:172
+Pass:0520 | Name:Alka | Class/Roll:6th sem/ 02 | Phone:9288132306 | Serial:173
+Pass:0521 | Name:Khushi Kumari | Class/Roll:ex GBM passout | Phone:99316 25418 | Serial:174
+Pass:0408 | Name:Chinki kumari | Class/Roll:2nd | Phone:7970447381 | Serial:175
+Pass:0466 | Name:Suruchi kumari | Class/Roll:2nd | Phone:9199679802 | Serial:176
+Pass:0432 | Name:Amisha sinha | Class/Roll:4th | Phone:8986430568 | Serial:177
+Pass:0402 | Name:Richa kumari | Class/Roll:4th | Phone:9113436428 | Serial:178
+Pass:0403 | Name:Kashish kumari | Class/Roll:4th | Phone:9798904125 | Serial:179
+Pass:0433 | Name:Priya singh | Class/Roll:2nd | Phone:8252727505 | Serial:180
+Pass:0414 | Name:Purnima | Class/Roll:2nd | Phone:9934339298 | Serial:181
+Pass:0399 | Name:Shalu | Class/Roll:2nd | Phone:9934339298 | Serial:182
+Pass:0415 | Name:Ankita | Class/Roll:2nd | Phone:9934339298 | Serial:183
+Pass:0422 | Name:Sejal | Class/Roll:2nd | Phone:9934339298 | Serial:184
+Pass:0398 | Name:Shreya | Class/Roll:2nd | Phone:7061845652 | Serial:185
+Pass:0411 | Name:Supriya kumari | Class/Roll:4th | Phone:7667786402 | Serial:186
+Pass:0412 | Name:Nirjala kumari | Class/Roll:4th | Phone:9334142440 | Serial:187
+Pass:0407 | Name:Priya kumari | Class/Roll:2nd | Phone:7061767181 | Serial:188
+Pass:0424 | Name:Anishta raj | Class/Roll:4th | Phone:9234661285 | Serial:189
+Pass:0508 | Name:Madhu kumari | Class/Roll:2nd | Phone:7970581436 | Serial:190
+Pass:0400 | Name:Sherya honey | Class/Roll:2nd | Phone:7783806611 | Serial:191
+Pass:0509 | Name:Kushi kumari | Class/Roll:4th | Phone:9234088157 | Serial:192
+Pass:0410 | Name:Sujata | Class/Roll:2nd | Phone:7061526157 | Serial:193
+Pass:0497 | Name:Nisha | Class/Roll:6th | Phone:9523500328 | Serial:194
+Pass:0413 | Name:Isha kumari | Class/Roll:2nd | Phone:9334142440 | Serial:195
+Pass:0579 | Name:Puja kumari | Class/Roll:4th/709 | Phone:9576083641 | Serial:196
+Pass:0563 | Name:Kajal kumari | Class/Roll:2th/90 | Phone:9128016938 | Serial:197
+Pass:0563 | Name:Kajal kumari | Class/Roll:2th/90 | Phone:9128016938 | Serial:197
+Pass:0558 | Name:Anu | Class/Roll:6th/197 | Phone:9779592399 | Serial:197
+Pass:0558 | Name:Anu | Class/Roll:6th/197 | Phone:9779592399 | Serial:197
+Pass:0576 | Name:Anjali kumari | Class/Roll:6th/489 | Phone:9341740664 | Serial:198
+Pass:0576 | Name:Anjali kumari | Class/Roll:6th/489 | Phone:9341740664 | Serial:198
+Pass:0559 | Name:Baby kumari | Class/Roll:6th/295 | Phone:7779841941 | Serial:199
+Pass:0564 | Name:Ankita kumari | Class/Roll:6th/195 | Phone:8409505734 | Serial:200
+Pass:0573 | Name:Kajal kumari | Class/Roll:6th/682 | Phone:7903564223 | Serial:203
+Pass:0549 | Name:Sohana khatan | Class/Roll:6th/468 | Phone:920435115 | Serial:204
+Pass:0553 | Name:Muskan Kumari | Class/Roll:6th/57 | Phone:9241460641 | Serial:205
+Pass:0554 | Name:Sonali kumari | Class/Roll:6th/584 | Phone:8102240065 | Serial:206
+Pass:0524 | Name:Saloni kumari | Class/Roll:6th/276 | Phone:8252461286 | Serial:207
+Pass:0172 | Name:Sweta kumari | Class/Roll:6th/889 | Phone:9576621172 | Serial:208
+Pass:0183 | Name:Muskan kumari | Class/Roll:4th/364 | Phone:9342 | Serial:209 | Notes:9341266005
+Pass:01883 | Name:Muskan kumari | Class/Roll:4th/364 | Phone:9341266005 | Serial:210
+Pass:0558 | Name:Anu kumari | Class/Roll:197 | Phone:9771592399 | Serial:211
+Pass:0558 | Name:Anu kumari | Class/Roll:197 | Phone:9771592399 | Serial:211
+Pass:0404 | Name:Priya kumari | Class/Roll:827 | Phone:7484096942 | Serial:212
+Pass:0458 | Name:Muskan kumari | Class/Roll:583 | Phone:8271186942 | Serial:213
+Pass:0559 | Name:Baby kumari | Class/Roll:295 | Phone:7779841941 | Serial:214
+Pass:0576 | Name:Anjali kumari | Class/Roll:489 | Phone:9341740644 | Serial:215
+Pass:0576 | Name:Anjali kumari | Class/Roll:489 | Phone:9341740644 | Serial:215
+Pass:0465 | Name:Saniya parween | Class/Roll:191 | Phone:7050104763 | Serial:216
+Pass:0469 | Name:Ashasiya parween | Class/Roll:567 | Phone:9204102293 | Serial:217
+Pass:0563 | Name:Kajal kumari | Class/Roll:Ncc | Phone:9128016938 | Serial:218
+Pass:0536 | Name:Arti kumari | Class/Roll:Sanjay gandhi mahila college | Phone:7255949037 | Serial:219
+Pass:0585 | Name:Rimghim kumari | Class/Roll:81 | Phone:8521273209 | Serial:220
+Pass:0518 | Name:Sonamati | Class/Roll:653 | Phone:9801309895 | Serial:221
+Pass:0494 | Name:Omkarnath patel | Class/Roll:Principal mam husband | Phone:9415601319 | Serial:222
+Pass:0494 | Name:Omkarnath patel | Class/Roll:Principal mam husband | Phone:9415601319 | Serial:223
+Pass:0552 | Name:Kahkashan perween | Class/Roll:624 | Phone:9006719311 | Serial:224
+Pass:0163 | Name:Archna kumari | Class/Roll:182 | Phone:9973879175 | Serial:225
+Pass:0375 | Name:Saloni kumari | Class/Roll:690 | Phone:7061913701 | Serial:226
+Pass:0477 | Name:Ankita kumari | Class/Roll:Evening college | Phone:7462807485 | Serial:227
+Pass:0481 | Name:Chhoti kumari | Class/Roll:478 | Phone:9234716024 | Serial:228
+Pass:0233 | Name:Aksnsha kumari | Class/Roll:Mother | Phone:6201382673 | Serial:229
+Pass:0436 | Name:Priya singh | Class/Roll:Lm college | Phone:9110051411 | Serial:230
+Pass:0434 | Name:Sonali raj | Class/Roll:2nd/263 | Phone:8371748453 | Serial:231
+Pass:0391 | Name:Shreya kumari | Class/Roll:2nd/156 | Phone:9065630360 | Serial:232
+Pass:0136 | Name:Khushi ranjan | Class/Roll:2nd/377 | Phone:6204029596 | Serial:233
+Pass:0500 | Name:Ayushi kumari | Class/Roll:2nd/165 | Phone:8837506423 | Serial:234
+Pass:0334 | Name:Sisriti kumari | Class/Roll:6th/445 | Phone:9693049228 | Serial:236
+Pass:0333 | Name:Sandhya | Class/Roll:Mother | Phone:6203579170 | Serial:237
+Pass:0541 | Name:Divya kumari | Class/Roll:6th/327 | Phone:8809859757 | Serial:238
+Pass:0583 | Name:Somam | Class/Roll:Mother | Phone:9939621506 | Serial:239
+Pass:Radhika/kumari | Name:Radhika kumari | Class/Roll:4th/593 | Phone:9229442733 | Serial:240
+Pass:0332 | Name:Radhika kumari | Class/Roll:4th/593 | Phone:9229442733 | Serial:241
+Pass:0330 | Name:Anjali kumari | Class/Roll:4th Sem / 267 | Phone:7488957548 | Serial:242
+Pass:0315 | Name:Varsha kumari | Class/Roll:4th/350 | Phone:7644011366 | Serial:243
+Pass:0485 | Name:Sanjana kri | Class/Roll:12 | Phone:9279654355 | Serial:244
+Pass:0580 | Name:Sonal | Class/Roll:691 | Phone:7480042991 | Serial:245
+Pass:0543 | Name:Dikish kumari | Class/Roll:2nd/500 | Phone:6200563797 | Serial:245
+Pass:0525 | Name:Anya | Class/Roll:Nps school | Phone:9934339298 | Serial:246
+Pass:0310 | Name:Muskan | Class/Roll:273 | Phone:9341643902 | Serial:247
+Pass:0498 | Name:Astha | Class/Roll:Anchoring | Phone:9162972235 | Serial:248
+Pass:0336 | Name:Ishu kumari | Class/Roll:4th/414 | Phone:6200361993 | Serial:249
+Pass:0492 | Name:Khushi kumari | Class/Roll:6th/31. | Phone:9852671830 | Serial:250
+Pass:0531 | Name:Puja Kumari | Class/Roll:2nd/479 | Phone:9113783229 | Serial:251
+Pass:0588 | Name:Khushbu Kumari | Class/Roll:4th/157 | Phone:6206328876 | Serial:251
+Pass:0588 | Name:Khushbu Kumari | Class/Roll:4th/157 | Phone:6206328876 | Serial:251
+Pass:0529 | Name:Kumkum Kumari | Class/Roll:6th/285 | Phone:7667895677 | Serial:252
+Pass:0435 | Name:Naz parween | Class/Roll:633 | Phone:9631534931 | Serial:252
+Pass:0322 | Name:Sania parween | Class/Roll:887 | Phone:8083242959 | Serial:253
