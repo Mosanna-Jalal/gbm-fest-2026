@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
-type StatusFilter = "ALL" | "NOT_ENTERED" | "INSIDE" | "OUTSIDE";
+type StatusFilter = "ALL" | "NOT_ENTERED" | "INSIDE" | "OUTSIDE" | "ATTENDED";
 type FestDay = "2026-04-06" | "2026-04-07";
 
 const dayLabels: Record<FestDay, string> = {
@@ -16,6 +16,7 @@ const statusLabels: Record<StatusFilter, string> = {
   NOT_ENTERED: "Not Entered",
   INSIDE: "Inside",
   OUTSIDE: "Gone Outside",
+  ATTENDED: "Attended",
 };
 
 export default function StudentsFilters({

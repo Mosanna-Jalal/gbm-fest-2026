@@ -9,7 +9,7 @@ import StudentsFilters from "@/components/StudentsFilters";
 
 export const dynamic = "force-dynamic";
 
-type StatusFilter = "ALL" | "NOT_ENTERED" | "INSIDE" | "OUTSIDE";
+type StatusFilter = "ALL" | "NOT_ENTERED" | "INSIDE" | "OUTSIDE" | "ATTENDED";
 type FestDay = "2026-04-06" | "2026-04-07";
 type StatusKey = "NOT_ENTERED" | "INSIDE" | "OUTSIDE";
 
@@ -31,7 +31,8 @@ export default async function StudentsPage({
   const selectedStatus: StatusFilter =
     params.status === "NOT_ENTERED" ||
     params.status === "INSIDE" ||
-    params.status === "OUTSIDE"
+    params.status === "OUTSIDE" ||
+    params.status === "ATTENDED"
       ? params.status
       : "ALL";
 
@@ -88,7 +89,9 @@ export default async function StudentsPage({
   const filteredRows =
     selectedStatus === "ALL"
       ? rows
-      : rows.filter((row) => row.selectedDayStatus === selectedStatus);
+      : selectedStatus === "ATTENDED"
+        ? rows.filter((row) => row.selectedDayStatus !== "NOT_ENTERED")
+        : rows.filter((row) => row.selectedDayStatus === selectedStatus);
 
   return (
     <main className="min-h-screen p-3 sm:p-6">
@@ -115,6 +118,7 @@ export default async function StudentsPage({
           <table className="w-full min-w-[700px] text-left">
             <thead className="bg-slate-50 text-xs text-slate-700">
               <tr>
+                <th className="px-3 py-2">UI Sl No</th>
                 <th className="px-3 py-2">Serial</th>
                 <th className="px-3 py-2">Name</th>
                 <th className="px-3 py-2">Pass No.</th>
@@ -125,9 +129,10 @@ export default async function StudentsPage({
               </tr>
             </thead>
             <tbody>
-              {filteredRows.map(({ student, day1Status, day2Status }) => {
+              {filteredRows.map(({ student, day1Status, day2Status }, index) => {
                 return (
                   <tr key={String(student._id)} className="border-t border-slate-100 text-sm">
+                    <td className="px-3 py-2">{index + 1}</td>
                     <td className="px-3 py-2">{student.serialNo}</td>
                     <td className="px-3 py-2 font-medium">{student.name}</td>
                     <td className="px-3 py-2">{student.passNumbers.join("/")}</td>

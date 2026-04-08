@@ -13,6 +13,10 @@ function parsePassNumbers(text: string) {
     .filter(Boolean);
 }
 
+function dedupePassNumbers(passNumbers: string[]) {
+  return Array.from(new Set(passNumbers));
+}
+
 export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
@@ -38,9 +42,32 @@ export async function PUT(
     );
   }
 
-  const passNumbers = parsePassNumbers(body.passNumbers);
+  const passNumbers = dedupePassNumbers(parsePassNumbers(body.passNumbers));
   if (!passNumbers.length) {
     return NextResponse.json({ error: "At least one pass number is required." }, { status: 400 });
+  }
+
+  const conflictingStudents = await StudentModel.find({
+    _id: { $ne: id },
+    passNumbers: { $in: passNumbers },
+  })
+    .select({ passNumbers: 1 })
+    .lean();
+  const duplicatePassNos = Array.from(
+    new Set(
+      conflictingStudents.flatMap((student) =>
+        student.passNumbers.filter((passNo) => passNumbers.includes(passNo))
+      )
+    )
+  );
+  if (duplicatePassNos.length) {
+    return NextResponse.json(
+      {
+        error: `Duplicate pass number(s): ${duplicatePassNos.join(", ")}. Each pass number can exist only once.`,
+        duplicatePassNos,
+      },
+      { status: 409 }
+    );
   }
 
   const student = await StudentModel.findByIdAndUpdate(

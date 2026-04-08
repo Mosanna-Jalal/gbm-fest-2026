@@ -21,6 +21,10 @@ type SeedStudent = {
   phoneNo: string;
 };
 
+function dedupePassNumbers(passNumbers: string[]) {
+  return Array.from(new Set(passNumbers.map((passNo) => passNo.trim()).filter(Boolean)));
+}
+
 export async function ensureBootstrap() {
   if (bootstrapped) return;
 
@@ -68,13 +72,54 @@ export async function ensureBootstrap() {
   const existingStudents = await StudentModel.find().lean();
   for (const student of existingStudents) {
     const normalized = normalizeNameAndClassRoll(student.name, student.classRoll);
-    if (!normalized.changed) continue;
+    const uniquePassNumbers = dedupePassNumbers(student.passNumbers);
+    const passNumbersChanged = uniquePassNumbers.length !== student.passNumbers.length;
+    if (!normalized.changed && !passNumbersChanged) continue;
 
     await StudentModel.updateOne(
       { _id: student._id },
-      { $set: { name: normalized.name, classRoll: normalized.classRoll, updatedBy: "system" } }
+      {
+        $set: {
+          name: normalized.name,
+          classRoll: normalized.classRoll,
+          ...(passNumbersChanged ? { passNumbers: uniquePassNumbers } : {}),
+          updatedBy: "system",
+        },
+      }
     );
     needsTextSync = true;
+  }
+
+  const studentsByCreated = await StudentModel.find()
+    .sort({ createdAt: 1, _id: 1 })
+    .select({ _id: 1, passNumbers: 1 })
+    .lean();
+  const ownerByPassNo = new Map<string, string>();
+  for (const student of studentsByCreated) {
+    const keptPassNos: string[] = [];
+    const uniquePassNos = dedupePassNumbers(student.passNumbers);
+
+    for (const passNo of uniquePassNos) {
+      if (ownerByPassNo.has(passNo)) {
+        continue;
+      }
+      ownerByPassNo.set(passNo, String(student._id));
+      keptPassNos.push(passNo);
+    }
+
+    if (!keptPassNos.length) {
+      await StudentModel.deleteOne({ _id: student._id });
+      needsTextSync = true;
+      continue;
+    }
+
+    if (keptPassNos.length !== student.passNumbers.length) {
+      await StudentModel.updateOne(
+        { _id: student._id },
+        { $set: { passNumbers: keptPassNos, updatedBy: "system" } }
+      );
+      needsTextSync = true;
+    }
   }
 
   if (needsTextSync) {
